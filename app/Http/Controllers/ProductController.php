@@ -8,20 +8,21 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller{
     public function index(Request $request)
-{
-    $query = Product::query();
-    if($search = $request->product_name){
-        $query->where('product_name', 'LIKE', "%{$search}%");
+    {
+        $query = Product::query();
+        if($search = $request->product_name){
+            $query->where('product_name', 'LIKE', "%{$search}%");
+        }
+
+        if ($company_id = $request -> company_id) {
+            $query->where('company_id',$company_id);
+        }    
+        
+        $companies = Company::all();
+        $products = $query->paginate(10);
+
+        return view('products.index', ['products' => $products, 'companies' => Company::all()]);
     }
-
-    if(isset($products->companies->company_name)){
-        $query->where('products->companies->company_name',$products->companies->company_name);
-    }
-
-    $products = $query->paginate(10);
-
-    return view('products.index', ['products' => $products]);
-}
 
 
     public function create()
@@ -68,6 +69,7 @@ class ProductController extends Controller{
 
     public function edit(Product $product)
     {
+        
         $companies = Company::all();
         return view('products.edit', compact('product', 'companies'));
     }
@@ -79,10 +81,14 @@ class ProductController extends Controller{
             'price' => 'required',
             'stock' => 'required',
         ]);
+
+
         $product->product_name = $request->product_name;
+        $product->company_id = $request->company_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->comment = $request->comment;
+        $product->img_path = $request->img_path;
 
         $product->save();
 

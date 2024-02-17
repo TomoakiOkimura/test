@@ -12,13 +12,10 @@
             </div>
 
             <div class="col-sm-12 col-md-3">
-                <select name="company_name" class="form-control" value="{{ request('product->company->company_name') }}">
-                    <option value="">未選択</option>
-
-                    @foreach($products as $product)
-                    <option value="{{ $product->company->company_name }}">
-                        {{ $product->company->company_name }}
-                    </option>  
+                <select class="form-select" id="company_id" name="company_id">
+                    <option value="">メーカー名</option>    
+                    @foreach($companies as $company)
+                    <option value="{{ $company->id }}" {{ request('company_id') == $company->id ? 'selected' : '' }}>{{ $company->company_name }}</option>
                     @endforeach
                 </select>
             </div>
