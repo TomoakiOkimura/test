@@ -88,7 +88,11 @@ class ProductController extends Controller{
         $product->price = $request->price;
         $product->stock = $request->stock;
         $product->comment = $request->comment;
-        $product->img_path = $request->img_path;
+        if($request->hasFile('img_path')){ 
+            $filename = $request->img_path->getClientOriginalName();
+            $filePath = $request->img_path->storeAs('products', $filename, 'public');
+            $product->img_path = '/storage/' . $filePath;
+        }
 
         $product->save();
 
