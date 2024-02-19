@@ -27,4 +27,19 @@ class Product extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function search($productName, $companyId)
+    {
+        $query = $this->newQuery();
+
+        if ($productName) {
+            $query->where('product_name', 'LIKE', "%{$productName}%");
+        }
+
+        if ($companyId) {
+            $query->where('company_id', $companyId);
+        }
+
+        return $query->paginate(10);
+    }
 }

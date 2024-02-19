@@ -9,19 +9,15 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller{
     public function index(Request $request)
     {
-        $query = Product::query();
-        if($search = $request->product_name){
-            $query->where('product_name', 'LIKE', "%{$search}%");
-        }
+        $productName = $request->product_name;
+        $companyId = $request->company_id;
 
-        if ($company_id = $request -> company_id) {
-            $query->where('company_id',$company_id);
-        }    
-        
+        $productModel = new Product;
+        $products = $productModel->search($productName, $companyId);
+
         $companies = Company::all();
-        $products = $query->paginate(10);
 
-        return view('products.index', ['products' => $products, 'companies' => Company::all()]);
+        return view('products.index', ['products' => $products, 'companies' => $companies]);
     }
 
 
