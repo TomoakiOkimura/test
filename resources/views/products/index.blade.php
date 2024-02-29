@@ -38,6 +38,7 @@
                     <th>メーカー名</th>
                     <th>価格</th>
                     <th>在庫数</th>
+                    <th>商品画像</th>
                     <th><a href="{{ route('products.create') }}" class="btn btn-warning btn-sm mx-1">新規登録</a></th>
                 </tr>
             </thead>
@@ -49,6 +50,7 @@
                     <td>{{ $product->company->company_name }}</td>
                     <td>{{ $product->price }}円</td>
                     <td>{{ $product->stock }}</td>
+                    <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
                     <td>
                         <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm mx-1">詳細表示</a>
                         <form method="POST" action="{{ route('products.destroy', $product) }}" class="d-inline">

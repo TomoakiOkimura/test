@@ -5,16 +5,15 @@ use App\Models\Product;
 use App\Models\Company;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller{
     public function index(Request $request)
     {
         $productName = $request->product_name;
         $companyId = $request->company_id;
-
         $productModel = new Product;
         $products = $productModel->search($productName, $companyId);
-
         $companies = Company::all();
 
         return view('products.index', ['products' => $products, 'companies' => $companies]);
@@ -24,37 +23,30 @@ class ProductController extends Controller{
     public function create()
     {
         $companies = Company::all();
-
         return view('products.create', compact('companies'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'product_name' => 'required', 
-            'company_id' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'comment' => 'nullable', 
-            'img_path' => 'nullable|image|max:2048',
-        ]);
-       
-        $product = new Product([
-            'product_name' => $request->get('product_name'),
-            'company_id' => $request->get('company_id'),
-            'price' => $request->get('price'),
-            'stock' => $request->get('stock'),
-            'comment' => $request->get('comment'),
-        ]);
-
-        if($request->hasFile('img_path')){ 
-            $filename = $request->img_path->getClientOriginalName();
-            $filePath = $request->img_path->storeAs('products', $filename, 'public');
-            $product->img_path = '/storage/' . $filePath;
+    public function store(Request $request){
+        try {
+            $request->validate([
+                'product_name' => 'required', 
+                'company_id' => 'required',
+                'price' => 'required',
+                'stock' => 'required',
+                'comment' => 'nullable', 
+                'img_path' => 'nullable|image|max:2048',
+            ]);
+            
+            $product = new Product();
+            $product->saveProduct($request->all(), $request->file('img_path'));
+            
+            return redirect('products');
+        } catch (\Exception $e) {
+            // エラーハンドリング処理を記述
+            // 例えば、エラー内容をログに出力したり、エラーメッセージを表示するなどの処理を行うことができます
+            \Log::error($e->getMessage());
+            return back()->withErrors('保存に失敗しました');
         }
-        $product->save();
-
-        return redirect('products');
     }
 
     public function show(Product $product)
@@ -70,36 +62,31 @@ class ProductController extends Controller{
         return view('products.edit', compact('product', 'companies'));
     }
 
-    public function update(Request $request, Product $product)
-    {
-        $request->validate([
-            'product_name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-        ]);
-
-
-        $product->product_name = $request->product_name;
-        $product->company_id = $request->company_id;
-        $product->price = $request->price;
-        $product->stock = $request->stock;
-        $product->comment = $request->comment;
-        if($request->hasFile('img_path')){ 
-            $filename = $request->img_path->getClientOriginalName();
-            $filePath = $request->img_path->storeAs('products', $filename, 'public');
-            $product->img_path = '/storage/' . $filePath;
-        }
-
-        $product->save();
-
-        return redirect()->route('products.index')
+    public function update(Request $request, Product $product){
+        try {
+            $request->validate([
+                'product_name' => 'required',
+                'price' => 'required',
+                'stock' => 'required',
+            ]);
+            $product->updateProduct($request);
+            return redirect()->route('products.index')
             ->with('success', 'Product updated successfully');
+        } catch (\Exception $e) {
+            // エラーメッセージの表示など、適切な処理を行う
+            return redirect()->back()
+            ->with('error', 'An error occurred while updating the product');
+        }
     }
 
     public function destroy(Product $product)
     {
-        $product->delete();
-
+        try {
+            $product->delete();
+        } catch (\Exception $e) {
+            // エラーログの記録やエラーメッセージの表示など、エラーハンドリングの処理を行う
+            return redirect()->back()->with('error', '削除に失敗しました。');
+        }
         return redirect('/products');
     }
 }
