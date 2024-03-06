@@ -6,6 +6,7 @@ use App\Models\Company;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller{
     public function index(Request $request)
@@ -42,8 +43,6 @@ class ProductController extends Controller{
             
             return redirect('products');
         } catch (\Exception $e) {
-            // エラーハンドリング処理を記述
-            // 例えば、エラー内容をログに出力したり、エラーメッセージを表示するなどの処理を行うことができます
             \Log::error($e->getMessage());
             return back()->withErrors('保存に失敗しました');
         }
@@ -82,11 +81,15 @@ class ProductController extends Controller{
     public function destroy(Product $product)
     {
         try {
+            if (!$product) {
+                return redirect()->back()->with('error', '商品が見つかりませんでした。');
+            }
             $product->delete();
+        
+            return redirect('/products')->with('success', '商品を削除しました。');
         } catch (\Exception $e) {
             // エラーログの記録やエラーメッセージの表示など、エラーハンドリングの処理を行う
             return redirect()->back()->with('error', '削除に失敗しました。');
         }
-        return redirect('/products');
     }
 }

@@ -48,7 +48,11 @@
                                 <img src="{{ asset($product->img_path) }}" alt="商品画像" class="product-image">
                             </div>
 
-                            <button type="submit" class="btn btn-success">変更</button>
+                            <form action="{{ route('products.update', ['product' => $product]) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-success">変更</button>
+                            </form>
                             <a class="btn btn-primary" onclick="history.back()">戻る</a>
                         </form>
                     </div>
