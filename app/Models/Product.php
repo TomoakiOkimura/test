@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
-{
+class Product extends Model{
     use HasFactory;
 
     protected $fillable = [
@@ -18,18 +17,15 @@ class Product extends Model
         'img_path',
     ];
 
-    public function sales()
-    {
+    public function sales(){
         return $this->hasMany(Sale::class);
     }
 
-    public function company()
-    {
+    public function company(){
         return $this->belongsTo(Company::class);
     }
 
-    public function search($productName, $companyId)
-    {
+    public function search($productName, $companyId){
         $query = $this->newQuery();
 
         if ($productName) {
@@ -43,8 +39,7 @@ class Product extends Model
         return $query->paginate(10);
     }
 
-    public function saveProduct($data, $file)
-    {
+    public function saveProduct($data, $file){
         $this->product_name = $data['product_name'];
         $this->company_id = $data['company_id'];
         $this->price = $data['price'];

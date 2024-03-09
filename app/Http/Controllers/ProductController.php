@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller{
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $productName = $request->product_name;
         $companyId = $request->company_id;
         $productModel = new Product;
@@ -20,23 +19,14 @@ class ProductController extends Controller{
         return view('products.index', ['products' => $products, 'companies' => $companies]);
     }
 
-
-    public function create()
-    {
+    public function create(){
         $companies = Company::all();
         return view('products.create', compact('companies'));
     }
 
-    public function store(Request $request){
+    public function store(ProductRequest $request){
         try {
-            $request->validate([
-                'product_name' => 'required', 
-                'company_id' => 'required',
-                'price' => 'required',
-                'stock' => 'required',
-                'comment' => 'nullable', 
-                'img_path' => 'nullable|image|max:2048',
-            ]);
+            $request->validated();
             
             $product = new Product();
             $product->saveProduct($request->all(), $request->file('img_path'));
@@ -48,38 +38,31 @@ class ProductController extends Controller{
         }
     }
 
-    public function show(Product $product)
-    {
+    public function show(Product $product){
 
         return view('products.show', ['product' => $product]);
     }
 
-    public function edit(Product $product)
-    {
+    public function edit(Product $product){
         
         $companies = Company::all();
         return view('products.edit', compact('product', 'companies'));
     }
 
-    public function update(Request $request, Product $product){
+    public function update(ProductRequest $request, Product $product){
         try {
-            $request->validate([
-                'product_name' => 'required',
-                'price' => 'required',
-                'stock' => 'required',
-            ]);
+            $request->validated();
+            
             $product->updateProduct($request);
             return redirect()->route('products.index')
             ->with('success', 'Product updated successfully');
         } catch (\Exception $e) {
-            // エラーメッセージの表示など、適切な処理を行う
             return redirect()->back()
-            ->with('error', 'An error occurred while updating the product');
+            ->with('error', '更新できませんでした');
         }
     }
 
-    public function destroy(Product $product)
-    {
+    public function destroy(Product $product){
         try {
             if (!$product) {
                 return redirect()->back()->with('error', '商品が見つかりませんでした。');
@@ -88,7 +71,6 @@ class ProductController extends Controller{
         
             return redirect('/products')->with('success', '商品を削除しました。');
         } catch (\Exception $e) {
-            // エラーログの記録やエラーメッセージの表示など、エラーハンドリングの処理を行う
             return redirect()->back()->with('error', '削除に失敗しました。');
         }
     }
