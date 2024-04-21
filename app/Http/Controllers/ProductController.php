@@ -10,6 +10,9 @@ use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller{
     public function index(Request $request){
+
+        $product = Product::sortable()->get();
+
         $productName = $request->product_name;
         $companyId = $request->company_id;
         $productModel = new Product;
@@ -62,16 +65,23 @@ class ProductController extends Controller{
         }
     }
 
-    public function destroy(Product $product){
+    public function destroy(Request $request) {
+    // dd($request);
+    $input = $request->all();
+    // dd($input);
+        DB::beginTransaction();
+
         try {
-            if (!$product) {
-                return redirect()->back()->with('error', '商品が見つかりませんでした。');
-            }
-            $product->delete();
-        
-            return redirect('/products')->with('success', '商品を削除しました。');
+          $product = Product::find($input['product']); 
+          $product->delete();
+
+          DB::commit();
+          return response()->json(['success' => true]);
+
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', '削除に失敗しました。');
+            DB::rollback();
+            return response()->json(['success' => false, 'message' => '削除に失敗しました']);
         }
     }
-}
+        
+};
