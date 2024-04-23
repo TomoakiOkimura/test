@@ -27,7 +27,7 @@ class Product extends Model{
         return $this->belongsTo(Company::class);
     }
 
-    public function search($productName, $companyId){
+    public function search($productName, $companyId, $request){
         $query = $this->newQuery();
 
         if ($productName) {
@@ -38,6 +38,21 @@ class Product extends Model{
             $query->where('company_id', $companyId);
         }
 
+        if($min_price = $request->min_price){
+            $query->where('price', '>=', $min_price);
+        }
+    
+        if($max_price = $request->max_price){
+            $query->where('price', '<=', $max_price);
+        }
+    
+        if($min_stock = $request->min_stock){
+            $query->where('stock', '>=', $min_stock);
+        }
+    
+        if($max_stock = $request->max_stock){
+            $query->where('stock', '<=', $max_stock);
+        }
         return $query->paginate(10);
     }
 

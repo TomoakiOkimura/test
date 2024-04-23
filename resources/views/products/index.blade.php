@@ -20,13 +20,20 @@
                 </select>
             </div>
 
-            <div>
-                <input type="number" name="min_price" id="minPrice" placeholder="最低価格">
-                <input type="number" name="max_price" id="maxPrice" placeholder="最高価格">
+            <div class="col-sm-12 col-md-2">
+                <input type="number" name="min_price" class="form-control" placeholder="最小価格" value="{{ request('min_price') }}">
             </div>
-            <div>
-                <input type="number" name="min_stock" id="minStock" placeholder="最低在庫数">
-                <input type="number" name="max_stock" id="maxStock" placeholder="最高在庫数">
+
+            <div class="col-sm-12 col-md-2">
+                <input type="number" name="max_price" class="form-control" placeholder="最大価格" value="{{ request('max_price') }}">
+            </div>
+
+            <div class="col-sm-12 col-md-2">
+                <input type="number" name="min_stock" class="form-control" placeholder="最小在庫" value="{{ request('min_stock') }}">
+            </div>
+
+            <div class="col-sm-12 col-md-2">
+                <input type="number" name="max_stock" class="form-control" placeholder="最大在庫" value="{{ request('max_stock') }}">
             </div>
 
             <div class="col-sm-12 col-md-1">

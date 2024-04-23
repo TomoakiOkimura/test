@@ -16,7 +16,7 @@ class ProductController extends Controller{
         $productName = $request->product_name;
         $companyId = $request->company_id;
         $productModel = new Product;
-        $products = $productModel->search($productName, $companyId);
+        $products = $productModel->search($productName, $companyId, $request);
         $companies = Company::all();
 
         return view('products.index', ['products' => $products, 'companies' => $companies]);

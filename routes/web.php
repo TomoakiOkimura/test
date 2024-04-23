@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
 
+Auth::routes();
+
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('products.index');
