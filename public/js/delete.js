@@ -1,27 +1,28 @@
 $(function() {
-    $('.btn-danger').click(function(){
+    $('.btn-danger').on('click',function(e){
+        console.log('OK');
+        e.preventDefault();
         var deleteConfirm = confirm('削除してよろしいでしょうか？');
+
         if(deleteConfirm == true) {
             console.log('削除非同期開始');
             var clickEle = $(this);
-            var product = clickEle.attr('data-product_id');
-            var deleteTarget = clickEle.closest('tr');
+            var productId = clickEle.attr('data-product_id');
+
             $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'POST',
-                url: 'delete',
+                type: 'DELETE',
+                url: '/products/delete/' + productId,
                 dataType: 'json',
-                data: {'product': product}
+                data: {'_token': '{{ csrf_token() }}'},
                       
             })//通信が成功した時の処理
             .done(function() {
                 console.log('削除通信成功');
-                deleteTarget.remove();
+                clickEle.parents('tr').remove();
             })
+
             .fail(function() {
-                console.log('通信後失敗');
+                alert('エラーが発生しました');
             })
         } 
     });

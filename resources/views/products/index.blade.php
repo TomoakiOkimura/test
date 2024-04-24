@@ -59,7 +59,7 @@
                    </tr>
             </thead>
             <tbody>
-            @foreach ($products as $product)
+                @foreach ($products as $product)
                 <tr>
                     <th scope="row">{{ $product->id }}</th>
                     <td>{{ $product->product_name }}</td>
@@ -69,15 +69,12 @@
                     <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
                     <td><a href="{{ route('products.show', ['product' => $product]) }}"class="btn btn-info btn-sm mx-1">詳細表示</a></td>
                     <td>
-           <!-- <form action="{{ route('destroy', $product->id) }}" method="POST"> -->
-            <!-- <form> -->
-            @csrf
-            @method('DELETE')
-            <button data-product_id="{{ $product->id }}" type="submit" class="btn btn-danger">削除</button>
-           <!-- </form> -->
-        </td>
+                        @csrf
+                        @method('DELETE')
+                        <button data-product_id="{{ $product->id }}" type="put" class="btn btn-danger">削除</button>
+                    </td>
                 </tr>
-            @endforeach
+                @endforeach
             </tbody>
         </table>
     </div>

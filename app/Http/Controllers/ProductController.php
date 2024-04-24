@@ -66,11 +66,9 @@ class ProductController extends Controller{
     }
 
     public function destroy(Request $request) {
-    // dd($request);
-    $input = $request->all();
-    // dd($input);
+        $input = $request->all();
         DB::beginTransaction();
-
+        
         try {
           $product = Product::find($input['product']); 
           $product->delete();
