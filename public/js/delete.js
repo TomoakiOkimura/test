@@ -10,11 +10,13 @@ $(function() {
             var productId = clickEle.attr('data-product_id');
 
             $.ajax({
-                type: 'DELETE',
-                url: '/products/delete/' + productId,
+                type: 'POST',
+                url: '/products/' + productId,
                 dataType: 'json',
-                data: {'_token': '{{ csrf_token() }}'},
-                      
+                data: {
+                    'product_id': productId,
+                    '_method': 'DELETE'
+                }                
             })//通信が成功した時の処理
             .done(function() {
                 console.log('削除通信成功');

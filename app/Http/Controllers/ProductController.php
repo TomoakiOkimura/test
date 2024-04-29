@@ -65,21 +65,20 @@ class ProductController extends Controller{
         }
     }
 
-    public function destroy(Request $request) {
-        $input = $request->all();
-        DB::beginTransaction();
-        
+    public function destroy(Product $product)
+    {
         try {
-          $product = Product::find($input['product']); 
-          $product->delete();
+            if (!$product) {
+                return redirect()->back()->with('error', '商品が見つかりませんでした。');
+            }
+            $product->delete();
 
-          DB::commit();
-          return response()->json(['success' => true]);
-
+            return redirect('/products')->with('success', '商品を削除しました。');
         } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['success' => false, 'message' => '削除に失敗しました']);
+            // エラーログの記録やエラーメッセージの表示など、エラーハンドリングの処理を行う
+            return redirect()->back()->with('error', '削除に失敗しました。');
         }
+        return redirect('/products');
     }
         
 };

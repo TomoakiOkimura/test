@@ -69,9 +69,11 @@
                     <td><img src="{{ asset($product->img_path) }}" alt="商品画像" width="100"></td>
                     <td><a href="{{ route('products.show', ['product' => $product]) }}"class="btn btn-info btn-sm mx-1">詳細表示</a></td>
                     <td>
-                        @csrf
-                        @method('DELETE')
-                        <button data-product_id="{{ $product->id }}" type="put" class="btn btn-danger">削除</button>
+                        <form method="POST" action="{{ route('products.destroy', $product) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button data-product_id="{{$product->product_id}}" type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
