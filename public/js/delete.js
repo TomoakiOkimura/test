@@ -11,7 +11,7 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '/products/' + productId,
+                url: 'products/' + productId,
                 dataType: 'json',
                 data: {
                     'product_id': productId,
