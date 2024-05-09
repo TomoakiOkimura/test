@@ -79,6 +79,5 @@ class ProductController extends Controller{
             return redirect()->back()->with('error', '削除に失敗しました。');
         }
         return redirect('/products');
-    }
-        
+    }        
 };
