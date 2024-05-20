@@ -8,11 +8,15 @@ $(function() {
             console.log('削除非同期開始');
             var clickEle = $(this);
             var productId = clickEle.attr('data-product_id');
+            console.log(productId);
 
             $.ajax({
                 type: 'POST',
                 url: 'products/' + productId,
-                dataType: 'json',
+                // dataType: 'json',
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 data: {
                     'product_id': productId,
                     '_method': 'DELETE'

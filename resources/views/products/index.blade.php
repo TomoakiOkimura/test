@@ -4,7 +4,7 @@
 <div class="container">
     <h1 class="mb-4">商品情報一覧</h1>
     
-    <div class="search mt-5">
+    <div class="search-forn mt-5">
         <h2>検索条件で絞り込み</h2>
         <form action="{{ route('products.index') }}" method="GET" class="row g-3">
             <div class="col-sm-12 col-md-3">
@@ -46,7 +46,7 @@
     <div class="products mt-5">
         <h2>商品情報</h2>
         
-        <table class="table table-striped" border="2">
+        <table id="pr-table" class= "table table-striped" border="2">
             <thead>
                 <tr>
                     <th scope="col">@sortablelink('product_id', 'ID')</th>
@@ -72,7 +72,7 @@
                         <form method="POST" action="{{ route('products.destroy', $product) }}">
                             @csrf
                             @method('DELETE')
-                            <button data-product_id="{{$product->product_id}}" type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
+                            <button data-product_id="{{$product->id}}" type="submit" class="btn btn-danger btn-sm mx-1">削除</button>
                         </form>
                     </td>
                 </tr>

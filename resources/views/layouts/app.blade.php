@@ -16,7 +16,6 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('js/search.js') }}" defer></script>
     <script src="{{ asset('js/delete.js') }}" defer></script>
 </head>
