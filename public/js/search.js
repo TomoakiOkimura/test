@@ -1,7 +1,8 @@
 $(function() {
     console.log('読み込みOK');
+    // deleteEvent();
     
-    $('btn-outline-secondary').on('click', function(e) {
+    $('.btn-outline-secondary').on('click', function(e) {
         console.log('検索開始');
         e.preventDefault();
         let formData = $('#search-form').serialize();
@@ -10,6 +11,9 @@ $(function() {
             url: 'products/',
             type: 'GET',
             data: formData,
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             dataType: 'html'
         }).done(function(data) {
             console.log('成功');
