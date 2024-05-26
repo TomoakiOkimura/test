@@ -17,7 +17,7 @@ $(function() {
             dataType: 'html'
         }).done(function(data) {
             console.log('成功');
-            console.log(data);
+            // console.log(data);
             let newTable = $(data).find('#products-table');
             $('#products-table').replaceWith(newTable);
             // loadSort();

@@ -4,9 +4,9 @@
 <div class="container">
     <h1 class="mb-4">商品情報一覧</h1>
     
-    <div id="search-form" class="mt-5">
+    <div class="mt-5">
         <h2>検索条件で絞り込み</h2>
-        <form action="{{ route('products.index') }}" method="GET" class="row g-3">
+        <form id="search-form" action="{{ route('products.index') }}" method="GET" class="row g-3">
             <div class="col-sm-12 col-md-3">
                 <input type="text" name="product_name" class="form-control" placeholder="商品名" value="{{ request('product_name') }}">
             </div>
@@ -49,7 +49,7 @@
         <table id="pr-table" class= "table table-striped" border="2">
             <thead>
                 <tr>
-                    <th scope="col">@sortablelink('product_id', 'ID')</th>
+                    <th scope="col">@sortablelink('id', 'ID')</th>
                     <th scope="col">@sortablelink('product_name', '商品名')</th>
                     <th scope="col">@sortablelink('company_name', 'メーカー名')</th>
                     <th scope="col">@sortablelink('price', '価格')</th>

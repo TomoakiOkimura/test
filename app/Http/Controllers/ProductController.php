@@ -11,7 +11,7 @@ use App\Http\Requests\ProductRequest;
 class ProductController extends Controller{
     public function index(Request $request){
 
-        // $product = Product::sortable()->get();
+        $product = Product::sortable()->get();
 
         $productName = $request->product_name;
         $companyId = $request->company_id;
