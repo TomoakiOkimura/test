@@ -46,14 +46,14 @@
     <div id="products-table" class="products mt-5">
         <h2>商品情報</h2>
         
-        <table id="pr-table" class= "table table-striped" border="2">
+        <table id="fav-table" class= "table table-striped" border="2">
             <thead>
                 <tr>
-                    <th scope="col">@sortablelink('id', 'ID')</th>
-                    <th scope="col">@sortablelink('product_name', '商品名')</th>
-                    <th scope="col">@sortablelink('company_name', 'メーカー名')</th>
-                    <th scope="col">@sortablelink('price', '価格')</th>
-                    <th scope="col">@sortablelink('stook', '在庫数')</th>
+                    <th>ID</th>
+                    <th>商品名</th>
+                    <th>メーカー名</th>
+                    <th>価格</th>
+                    <th>在庫数</th>
                     <th>商品画像</th>
                     <th><a href="{{ route('products.create') }}" class="btn btn-warning btn-sm mx-1">新規登録</a></th>
                    </tr>
