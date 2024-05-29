@@ -6,6 +6,7 @@ $(function() {
         console.log('検索開始');
         e.preventDefault();
         let formData = $('#search-form').serialize();
+        loadTableSorter('new-table');
         
         $.ajax({
             url: 'products/',
@@ -20,7 +21,7 @@ $(function() {
             // console.log(data);
             let newTable = $(data).find('#products-table');
             $('#products-table').replaceWith(newTable);
-            // loadSort();
+            loadTableSorter();
             // deleteEvent();
         }).fail(function() {
             alert('通信失敗');

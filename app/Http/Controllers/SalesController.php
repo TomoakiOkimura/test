@@ -3,45 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product; // Productモデルを使用
-use App\Models\Sale; // Saleモデルを使用
+use App\Models\Product;
+use App\Models\Sale;
+use Illuminate\Support\Facades\DB;
+
 
 class SalesController extends Controller
 {
-    public function purchase(Request $request)
-{
-    // リクエストから必要なデータを取得する
-    $productId = $request->input('product_id'); // "product_id":7が送られた場合は7が代入される
-    $quantity = $request->input('quantity', 1); // 購入する数を代入する もしも”quantity”というデータが送られていない場合は1を代入する
+    public function purchase(Request $request) {
 
+        try{
+            DB::beginTransaction();
 
+              //リクエストから商品IDを取得
+              $productId = $request->input('product_id');
+              // dd($request);
+              $product = Product::find($productId); //リクエストから商品IDを取得
 
-    // データベースから対象の商品を検索・取得
-    $product = Product::find($productId); // "product_id":7 送られてきた場合 Product::find(7)の情報が代入される
+              if(!$product) {
+                DB::rollBack();
+                return response()->json(['error' => '商品が存在しません']);
+              }
 
-    // 商品が存在しない、または在庫が不足している場合のバリデーションを行う
-    if (!$product) {
-        return response()->json('商品が存在しません');
+              if($product->stock <= 0) {
+                DB::rollBack();
+                return response()->json(['error' => '在庫が不足しています']);
+              }
+              //Productsテーブルの在庫数を減らす
+              $product->stock -= 1;
+              $product->save();
+
+              $sale = new Sale();
+              $sale->product_id = $product->id;
+              $sale->save();
+
+            DB::commit();
+            return ['success' => true];
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ['error' => '購入処理に失敗しました'];
+        }
     }
-    if ($product->stock < $quantity) {
-        return response()->json('商品が在庫不足です');
-    }
-
-    // 在庫を減少させる
-    $product->stock -= $quantity; // $quantityは購入数を指し、デフォルトで1が指定されている
-    $product->save();
-
-
-    // Salesテーブルに商品IDと購入日時を記録する
-    $sale = new Sale([
-        'product_id' => $productId,
-        // 主キーであるIDと、created_at , updated_atは自動入力されるため不要
-    ]);
-
-    $sale->save();
-
-    // レスポンスを返す
-    return response()->json('購入成功');
-}
-
 }

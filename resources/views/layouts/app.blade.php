@@ -24,9 +24,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
 
     <script>
-    $(document).ready(function() {
-    $('#fav-table').tablesorter();
-    });
+    function loadTableSorter() {
+        $(document).ready(function() {
+            $('#fav-table').tablesorter();
+        });
+    }
+    // loadTableSorter関数を呼び出し
+    loadTableSorter();
     </script>
 
 </head>
