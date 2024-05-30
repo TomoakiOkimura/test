@@ -1,4 +1,4 @@
-$(function() {
+function deleteEvent() {
     $('.btn-danger').on('click',function(e){
         console.log('OK');
         e.preventDefault();
@@ -32,4 +32,4 @@ $(function() {
             })
         } 
     });
-});
+};
